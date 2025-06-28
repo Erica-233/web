@@ -4,10 +4,9 @@
 
 ## 项目结构
 
-- `index.html` - 首页（基于news.htm）
+- `index.html` - 首页
 - `555.htm` - 主页面
 - `555-1.htm`, `555-2.htm`, `555-3.htm` - 子页面
-- `news.htm` - 新闻页面
 - `video.htm` - 视频页面
 - `search.htm` - 搜索页面
 - 各种图片文件 (`.jpg`)
@@ -21,5 +20,3 @@
 此项目已配置为使用GitHub Pages进行静态网站托管。
 
 访问地址：https://erica-233.github.io/web/
-
-**首页**：https://erica-233.github.io/web/ （自动显示index.html内容） 
