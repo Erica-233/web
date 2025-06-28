@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索 - 日本内阁</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #f1f3f4;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --text-tertiary: #9aa0a6;
+            --accent-color: #0078d4;
+            --accent-hover: #106ebe;
+            --border-color: #dadce0;
+            --border-light: #e8eaed;
+            --card-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            --card-shadow-hover: 0 2px 8px rgba(32, 33, 36, 0.15);
+            --hover-bg: rgba(32, 33, 36, 0.04);
+            --jp-red: #bc002d;
+            --success-green: #137333;
+            --warning-orange: #ea8600;
+        }
+
+        .dark-mode {
+            --bg-primary: #202124;
+            --bg-secondary: #303134;
+            --bg-tertiary: #3c4043;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --text-tertiary: #80868b;
+            --border-color: #5f6368;
+            --border-light: #3c4043;
+            --card-shadow: 0 1px 3px rgba(23, 23, 23, 0.5);
+            --card-shadow-hover: 0 2px 6px rgba(23, 23, 23, 0.3);
+            --hover-bg: rgba(232, 234, 237, 0.08);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 顶部导航栏 - Edge 风格 */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--bg-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            color: var(--accent-color);
+            font-size: 24px;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 700px;
+            margin: 0 40px;
+            position: relative;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--bg-tertiary);
+            border: 1px solid transparent;
+            border-radius: 28px;
+            padding: 12px 20px;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .search-box:hover {
+            background: var(--bg-secondary);
+            box-shadow: var(--card-shadow);
+        }
+
+        .search-box:focus-within {
+            background: var(--bg-primary);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+        }
+
+        .search-icon {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-right: 12px;
+        }
+
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .voice-search {
+            color: var(--accent-color);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .voice-search:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background-color: var(--hover-bg);
+            color: var(--text-primary);
+        }
+
+        .nav-item i {
+            font-size: 16px;
+        }
+
+        /* 搜索结果头部 */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 24px 0 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .results-info {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .result-count {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .results-filter {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .filter-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .filter-btn.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        /* 搜索结果项 - Edge 风格 */
+        .result-item {
+            margin-bottom: 24px;
+            max-width: 700px;
+            padding: 16px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .result-item:hover {
+            background-color: var(--hover-bg);
+            border-color: var(--border-light);
+            transform: translateY(-1px);
+        }
+
+        .result-url {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: var(--success-green);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .result-url i {
+            margin-right: 6px;
+            font-size: 12px;
+        }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            text-decoration: none;
+            display: block;
+            line-height: 1.4;
+            transition: color 0.2s;
+        }
+
+        .result-title:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
+
+        .result-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .result-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .meta-item i {
+            font-size: 12px;
+        }
+
+        /* 快速操作按钮 */
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .result-item:hover .quick-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--border-light);
+        }
+
+        .action-btn:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        /* 相关搜索建议 */
+        .related-searches {
+            margin: 32px 0;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .related-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .related-item {
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .related-item:hover {
+            background: var(--hover-bg);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        /* 分页 - Edge 风格 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 48px 0 32px;
+            gap: 4px;
+        }
+
+        .page-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            height: 40px;
+            padding: 0 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .page-item:hover {
+            background: var(--hover-bg);
+            border-color: var(--border-light);
+        }
+
+        .page-item.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .page-item.disabled {
+            color: var(--text-tertiary);
+            cursor: not-allowed;
+        }
+
+        .page-item.disabled:hover {
+            background: transparent;
+            border-color: transparent;
+        }
+
+        /* 页脚 - Edge 风格 */
+        .footer {
+            padding: 32px 0 24px;
+            border-top: 1px solid var(--border-light);
+            background: var(--bg-secondary);
+            margin-top: 48px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-copyright {
+            color: var(--text-tertiary);
+            font-size: 13px;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-light);
+            z-index: 100;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .theme-toggle i {
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .top-nav {
+                flex-direction: column;
+                padding: 16px 0;
+                gap: 16px;
+            }
+            
+            .logo {
+                margin-bottom: 8px;
+            }
+            
+            .search-container {
+                width: 100%;
+                margin: 0;
+            }
+            
+            .nav-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .results-filter {
+                flex-wrap: wrap;
+            }
+            
+            .result-item {
+                padding: 12px;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-links {
+                justify-content: center;
+            }
+            
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .search-box {
+                padding: 10px 16px;
+            }
+            
+            .result-title {
+                font-size: 16px;
+            }
+            
+            .pagination {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航栏 -->
+        <div class="top-nav">
+            <a href="#" class="logo">
+                <i class="fas fa-search logo-icon"></i>
+                <span>Search</span>
+            </a>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" value="日本内阁" placeholder="搜索网页、图片、视频...">
+                    <i class="fas fa-microphone voice-search"></i>
+                </div>
+            </div>
+            
+            <div class="nav-right">
+                <div class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>历史记录</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>设置</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>登录</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜索结果头部 -->
+        <div class="results-header">
+            <div class="results-info">
+                找到约 <span class="result-count">1,240,000</span> 条结果（用时 0.38 秒）
+            </div>
+            <div class="results-filter">
+                <div class="filter-btn active">全部</div>
+                <div class="filter-btn">新闻</div>
+                <div class="filter-btn">图片</div>
+                <div class="filter-btn">视频</div>
+                <div class="filter-btn">学术</div>
+            </div>
+        </div>
+        
+        <!-- 搜索结果项 1 -->
+        <div class="result-item">
+            <div class="result-url">
+                <i class="fas fa-link"></i>
+                www.cas.go.jp
+            </div>
+            <a href="#" class="result-title">内閣官房 - 日本内阁官方机构门户网站</a>
+            <div class="result-description">
+                日本内阁官房是日本内阁的行政机构，负责内阁会议事务、综合协调内阁重要政策、收集分析重要情报等工作。最新消息显示，内阁官房正在协调应对近期国内局势变化...
+            </div>
+            <div class="result-meta">
+                <div class="meta-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>官方机构</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>更新于2023年12月15日</span>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <div class="action-btn">收藏</div>
+                <div class="action-btn">分享</div>
+                <div class="action-btn">更多</div>
+            </div>
+        </div>
+        
+        <!-- 搜索结果项 8 -->
+<div class="result-item">
+    <a href="#" class="result-title">戒严期结束，自卫队撤出首都圈</a>
+    <div class="result-url">
+        <i class="fas fa-link"></i>
+        www.nhk.or.jp/news
+    </div>
+    <div class="result-description">
+        据NHK报道，日本政府今日宣布首都圈戒严期正式结束，自卫队已开始从东京及周边地区撤出。这是自12月10日因骚乱实施戒严以来的重大转折点。
+    </div>
+    <div class="result-meta">
+        <span>NHK日本放送协会</span>
+        <span>刚刚</span>
+        <span>新闻报道</span>
+    </div>
+</div>
+
+        <!-- 搜索结果项 2 -->
+        <div class="result-item">
+            <div class="result-url">
+                <i class="fas fa-link"></i>
+                www.news.asia/japan-cabinet
+            </div>
+            <a href="#" class="result-title">日本史上最年轻内阁？全女性阵容引发全球关注</a>
+            <div class="result-description">
+                日本新内阁以全女性成员阵容亮相，平均年龄仅26岁，被媒体称为"少女内阁"。这一前所未有的政治变革引发了国内外广泛讨论，专家分析认为这标志着日本政治进入新时代...
+            </div>
+            <div class="result-meta">
+                <div class="meta-item">
+                    <i class="fas fa-newspaper"></i>
+                    <span>亚洲新闻周刊</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>2小时前</span>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <div class="action-btn">收藏</div>
+                <div class="action-btn">分享</div>
+                <div class="action-btn">更多</div>
+            </div>
+        </div>
+        
+        <!-- 搜索结果项 3 -->
+        <div class="result-item">
+            <div class="result-url">
+                <i class="fas fa-link"></i>
+                www.business.jp/feature/toyokawa
+            </div>
+            <a href="#" class="result-title">丰川祥子：从TWG集团继承人到日本最年轻首相</a>
+            <div class="result-description">
+                丰川祥子作为日本最大财阀TWG集团的继承人，凭借其经济改革方案获得民众支持，以28岁年龄成为日本史上最年轻首相。她的商业背景和政治理念备受关注...
+            </div>
+            <div class="result-meta">
+                <div class="meta-item">
+                    <i class="fas fa-building"></i>
+                    <span>日本经济新闻</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>1天前</span>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <div class="action-btn">收藏</div>
+                <div class="action-btn">分享</div>
+                <div class="action-btn">更多</div>
+            </div>
+        </div>
+        
+        <!-- 搜索结果项 4 -->
+        <div class="result-item">
+            <div class="result-url">
+                <i class="fas fa-link"></i>
+                www.opinion.jp/politics
+            </div>
+            <a href="#" class="result-title">"新内阁"引担忧：日本国民对年轻内阁执政能力存疑</a>
+            <div class="result-description">
+                最新民调显示，67%的日本国民对全女性年轻内阁的执政能力表示担忧，特别是面对当前经济危机和国际形势的挑战。专家认为这反映了传统政治观念与现代变革的冲突...
+            </div>
+            <div class="result-meta">
+                <div class="meta-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>朝日新闻</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>3小时前</span>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <div class="action-btn">收藏</div>
+                <div class="action-btn">分享</div>
+                <div class="action-btn">更多</div>
+            </div>
+        </div>
+        
+        <!-- 搜索结果项 5 -->
+        <div class="result-item">
+            <div class="result-url">
+                <i class="fas fa-link"></i>
+                www.economy.global/oil-crisis
+            </div>
+            <a href="#" class="result-title">中东冲突致油价飙升，日本经济面临严峻考验</a>
+            <div class="result-description">
+                受中东局势影响，国际油价突破每桶120美元，高度依赖能源进口的日本面临新一轮经济危机。新内阁紧急召开经济对策会议，讨论应对措施...
+            </div>
+            <div class="result-meta">
+                <div class="meta-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>环球经济</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>6小时前</span>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <div class="action-btn">收藏</div>
+                <div class="action-btn">分享</div>
+                <div class="action-btn">更多</div>
+            </div>
+        </div>
+        
+        <!-- 搜索结果项 6 -->
+        <div class="result-item">
+            <div class="result-url">
+                <i class="fas fa-link"></i>
+                www.reuters.jp/tokyo-riot
+            </div>
+            <a href="#" class="result-title">东京骚乱逐渐平息，内阁宣布解除戒严令</a>
+            <div class="result-description">
+                持续两周的东京大规模抗议活动逐渐平息，日本内阁今日宣布解除戒严令。警方数据显示，事件共造成23人受伤，数百人被捕。政府表示将加强社会管理...
+            </div>
+            <div class="result-meta">
+                <div class="meta-item">
+                    <i class="fas fa-globe"></i>
+                    <span>路透社东京</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>8小时前</span>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <div class="action-btn">收藏</div>
+                <div class="action-btn">分享</div>
+                <div class="action-btn">更多</div>
+            </div>
+        </div>
+        
+        <!-- 搜索结果项 7 -->
+        <div class="result-item">
+            <div class="result-url">
+                <i class="fas fa-link"></i>
+                www.foreignaffairs.cn/japan
+            </div>
+            <a href="#" class="result-title">东方大国回应日本内阁更迭：尊重日本人民的选择</a>
+            <div class="result-description">
+                外交部发言人表示，中方注意到日本内阁的重大变化，尊重日本人民的选择，期待与新内阁共同维护地区和平稳定，推动双边关系发展...
+            </div>
+            <div class="result-meta">
+                <div class="meta-item">
+                    <i class="fas fa-flag"></i>
+                    <span>東方大国外交部官网</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-clock"></i>
+                    <span>2023年12月10日</span>
+                </div>
+            </div>
+            <div class="quick-actions">
+                <div class="action-btn">收藏</div>
+                <div class="action-btn">分享</div>
+                <div class="action-btn">更多</div>
+            </div>
+        </div>
+
+        <!-- 相关搜索建议 -->
+        <div class="related-searches">
+            <div class="related-title">相关搜索</div>
+            <div class="related-grid">
+                <div class="related-item">日本内阁成员名单</div>
+                <div class="related-item">丰川祥子首相</div>
+                <div class="related-item">丰川内阁政策</div>
+                <div class="related-item">日本政治改革</div>
+                <div class="related-item">东京戒严令</div>
+                <div class="related-item">日本经济危机</div>
+            </div>
+        </div>
+        
+        <!-- 分页 -->
+        <div class="pagination">
+            <a href="#" class="page-item">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <a href="#" class="page-item active">1</a>
+            <a href="#" class="page-item">2</a>
+            <a href="#" class="page-item">3</a>
+            <a href="#" class="page-item">4</a>
+            <a href="#" class="page-item">5</a>
+            <span class="page-item disabled">...</span>
+            <a href="#" class="page-item">10</a>
+            <a href="#" class="page-item">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <div class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#" class="footer-link">帮助</a>
+                    <a href="#" class="footer-link">隐私</a>
+                    <a href="#" class="footer-link">条款</a>
+                    <a href="#" class="footer-link">设置</a>
+                    <a href="#" class="footer-link">关于我们</a>
+                </div>
+                <div class="footer-copyright">
+                    © 2023 Mashiro Search. 保留所有权利。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主题切换按钮 -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+        
+        // 搜索功能
+        const searchInput = document.querySelector('.search-input');
+        const searchBox = document.querySelector('.search-box');
+        
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        searchBox.addEventListener('click', () => {
+            searchInput.focus();
+        });
+        
+        function performSearch() {
+            const query = searchInput.value.trim();
+            if (query) {
+                // 模拟搜索功能
+                console.log(`正在搜索: ${query}`);
+            }
+        }
+        
+        // 筛选按钮
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // 快速操作按钮
+        const actionBtns = document.querySelectorAll('.action-btn');
+        actionBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const action = btn.textContent;
+                console.log(`执行操作: ${action}`);
+            });
+        });
+
+        // 相关搜索项
+        const relatedItems = document.querySelectorAll('.related-item');
+        relatedItems.forEach(item => {
+            item.addEventListener('click', () => {
+                searchInput.value = item.textContent;
+                performSearch();
+            });
+        });
+
+        // 语音搜索
+        const voiceSearch = document.querySelector('.voice-search');
+        voiceSearch.addEventListener('click', () => {
+            console.log('启动语音搜索');
+        });
+
+        // 搜索结果点击跳转到555.htm
+        document.querySelectorAll('.result-item').forEach(function(item) {
+            item.addEventListener('click', function(e) {
+                // 如果点击的不是链接或按钮，则跳转
+                if (!e.target.closest('a') && !e.target.closest('.action-btn')) {
+                    window.location.href = '555.htm';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

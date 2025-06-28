@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidNews - 视频资讯平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans SC', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #00a1d6;
+            --primary-dark: #0090c1;
+            --primary-light: #e5f7ff;
+            --bg-light: #f8f9fa;
+            --bg-dark: #222;
+            --text-primary: #212121;
+            --text-secondary: #666;
+            --text-tertiary: #999;
+            --border: #e7e7e7;
+            --border-light: #f0f0f0;
+            --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --header-height: 64px;
+            --gradient-primary: linear-gradient(135deg, #00a1d6 0%, #0090c1 100%);
+            --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            background-color: #fafbfc;
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        /* 顶部导航栏 - 现代化设计 */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 1px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 32px;
+            filter: drop-shadow(0 2px 4px rgba(0, 161, 214, 0.2));
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .nav-item {
+            padding: 8px 16px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            border-radius: 20px;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 320px;
+            margin: 0 24px;
+        }
+
+        .search-box {
+            width: 100%;
+            height: 40px;
+            background: var(--bg-light);
+            border: 2px solid transparent;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            transition: all 0.3s;
+        }
+
+        .search-box:hover {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box:focus-within {
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 161, 214, 0.1);
+        }
+
+        .search-icon {
+            color: var(--text-tertiary);
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 16px;
+        }
+
+        .action-btn:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .action-btn i {
+            font-size: 16px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 主要内容区 */
+        .main-content {
+            max-width: 1600px;
+            margin: calc(var(--header-height) + 24px) auto 0;
+            padding: 0 24px;
+            display: flex;
+            gap: 24px;
+        }
+
+        /* 左侧内容 */
+        .content-left {
+            flex: 1;
+        }
+
+        /* 轮播图 - 增强版 */
+        .banner {
+            width: 100%;
+            height: 420px;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 32px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s;
+        }
+
+        .banner:hover {
+            box-shadow: var(--card-shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .banner-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex;
+            align-items: flex-end;
+            padding: 40px;
+            color: white;
+        }
+
+        .banner-slide.active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .banner-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            background: var(--gradient-secondary);
+        }
+
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 0%, transparent 40%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.7) 100%);
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 3;
+            max-width: 65%;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 24px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .banner-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .banner-desc {
+            font-size: 16px;
+            margin-bottom: 16px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .banner-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .banner-controls {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            z-index: 10;
+            display: flex;
+            gap: 12px;
+        }
+
+        .banner-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .banner-dot:hover {
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(1.1);
+        }
+
+        .banner-dot.active {
+            background: white;
+            width: 36px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 视频分区 - 现代化设计 */
+        .section {
+            margin-bottom: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .section:hover {
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            color: var(--text-primary);
+        }
+
+        .section-title i {
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .section-more {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-more:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            padding: 24px;
+        }
+
+        .video-card {
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .video-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .video-cover {
+            position: relative;
+            height: 160px;
+            border-radius: 12px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+
+        .video-card:hover .video-cover {
+            transform: scale(1.05);
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            backdrop-filter: blur(4px);
+        }
+
+        .video-info {
+            padding: 0 8px 12px;
+        }
+
+        .video-title {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 8px;
+            height: 42px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            color: var(--text-primary);
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .video-author {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .author-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--gradient-secondary);
+        }
+
+        /* 右侧边栏 - 现代化设计 */
+        .sidebar {
+            width: 320px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 24px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .sidebar-card:hover {
+            box-shadow: var(--card-shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .sidebar-header {
+            padding: 20px 24px;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .sidebar-header i {
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .rank-list {
+            padding: 12px 0;
+        }
+
+        .rank-item {
+            display: flex;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .rank-item:hover {
+            background: var(--primary-light);
+            border-left-color: var(--primary);
+        }
+
+        .rank-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .rank-item:nth-child(1) .rank-num {
+            background: #ffeded;
+            color: #ff5656;
+        }
+
+        .rank-item:nth-child(2) .rank-num {
+            background: #ffefd9;
+            color: #ff8a00;
+        }
+
+        .rank-item:nth-child(3) .rank-num {
+            background: #e8f4ff;
+            color: #00a1d6;
+        }
+
+        .rank-title {
+            font-size: 14px;
+            line-height: 1.4;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .hot-topics {
+            padding: 20px 24px;
+        }
+
+        .topic-item {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin: 0 8px 12px 0;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .topic-item:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .follow-card {
+            display: flex;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .follow-card:last-child {
+            border-bottom: none;
+        }
+
+        .follow-card:hover {
+            background: var(--primary-light);
+        }
+
+        .follow-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-right: 16px;
+            background: var(--gradient-secondary);
+        }
+
+        .follow-info {
+            flex: 1;
+        }
+
+        .follow-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .follow-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .follow-btn {
+            width: 80px;
+            height: 32px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--primary);
+        }
+
+        .follow-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* 底部区域 - 现代化设计 */
+        .footer {
+            background: white;
+            padding: 48px 0 24px;
+            margin-top: 60px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .footer-column {
+            flex: 1;
+        }
+
+        .footer-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s;
+            padding: 4px 0;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 24px;
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 13px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .video-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .content-left {
+                margin-right: 0;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .search-container {
+                flex: 1;
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 16px;
+            }
+            
+            .logo-text {
+                font-size: 20px;
+            }
+            
+            .search-container {
+                max-width: 280px;
+                margin: 0 16px;
+            }
+            
+            .search-box {
+                height: 36px;
+                padding: 0 12px;
+            }
+            
+            .user-actions {
+                gap: 12px;
+            }
+            
+            .action-btn span {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 0 16px;
+                gap: 16px;
+            }
+            
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+                padding: 16px;
+            }
+            
+            .banner {
+                height: 320px;
+                margin-bottom: 24px;
+            }
+            
+            .banner-content {
+                max-width: 80%;
+                padding: 20px;
+            }
+            
+            .banner-title {
+                font-size: 22px;
+            }
+            
+            .banner-desc {
+                font-size: 14px;
+            }
+            
+            .banner-tag {
+                font-size: 12px;
+                padding: 5px 12px;
+            }
+            
+            .section-header {
+                padding: 16px 20px;
+            }
+            
+            .section-title {
+                font-size: 18px;
+            }
+            
+            .video-cover {
+                height: 140px;
+            }
+            
+            .video-title {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 0 12px;
+            }
+            
+            .logo-icon {
+                font-size: 28px;
+            }
+            
+            .logo-text {
+                font-size: 18px;
+            }
+            
+            .search-container {
+                max-width: 200px;
+                margin: 0 12px;
+            }
+            
+            .search-box {
+                height: 32px;
+                padding: 0 10px;
+            }
+            
+            .avatar {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+            
+            .main-content {
+                padding: 0 12px;
+            }
+            
+            .banner {
+                height: 280px;
+                border-radius: 12px;
+            }
+            
+            .banner-content {
+                max-width: 90%;
+                padding: 16px;
+            }
+            
+            .banner-title {
+                font-size: 18px;
+            }
+            
+            .banner-desc {
+                font-size: 12px;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                padding: 12px;
+            }
+            
+            .video-cover {
+                height: 180px;
+            }
+            
+            .section-header {
+                padding: 12px 16px;
+            }
+            
+            .section-title {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-play-circle logo-icon"></i>
+            <div class="logo-text">VidNews</div>
+        </div>
+        
+        <div class="nav-links">
+            <div class="nav-item active">首页</div>
+            <div class="nav-item">国际</div>
+            <div class="nav-item">国内</div>
+            <div class="nav-item">科技</div>
+            <div class="nav-item">生活</div>
+            <div class="nav-item">娱乐</div>
+            <div class="nav-item">游戏</div>
+        </div>
+        
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="搜索视频、UP主、新闻">
+            </div>
+        </div>
+        
+        <div class="user-actions">
+            <div class="action-btn">
+                <i class="fas fa-history"></i>
+                <span>历史</span>
+            </div>
+            <div class="action-btn">
+                <i class="fas fa-upload"></i>
+                <span>投稿</span>
+            </div>
+            <div class="avatar">U</div>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <div class="main-content">
+        <!-- 左侧内容区 -->
+        <div class="content-left">
+            <!-- 轮播图 -->
+            <div class="banner">
+                <div class="banner-slide active">
+                    <img src="https://tse1-mm.cn.bing.net/th/id/OIP-C.mbRDj7KWifmE15lUMO-IEwHaE8?rs=1&pid=ImgDetMain" alt="日本新内阁" class="banner-image">
+                    <div class="banner-overlay"></div>
+                    <div class="banner-content">
+                        <div class="banner-title">日本新内阁全女性阵容引全球关注</div>
+                        <div class="banner-desc">平均年龄28岁的"少女内阁"能否应对国家危机？</div>
+                        <div class="banner-tag">国际热点</div>
+                    </div>
+                </div>
+                <div class="banner-slide">
+                    <img src="https://n.sinaimg.cn/sinakd20220620s/798/w1024h574/20220620/62f8-03107ff142e769e078b62fc262828cfa.jpg" alt="沙特内战结束" class="banner-image">
+                    <div class="banner-overlay"></div>
+                    <div class="banner-content">
+                        <div class="banner-title">沙特内战正式结束，和平进程开启</div>
+                        <div class="banner-desc">政府军宣布完全控制局面，重建计划启动</div>
+                        <div class="banner-tag">国际焦点</div>
+                    </div>
+                </div>
+                <div class="banner-slide">
+                    <img src="https://inews.gtimg.com/news_bt/OvHS-MH2rndKhbhITIJ1RrKZezqCy1v5O_df36r6L3x8gAA/641" alt="全美骚乱" class="banner-image">
+                    <div class="banner-overlay"></div>
+                    <div class="banner-content">
+                        <div class="banner-title">全美骚乱持续升级，国民警卫队全面出动</div>
+                        <div class="banner-desc">1992年以来最严重社会动荡，多州进入紧急状态</div>
+                        <div class="banner-tag">全球热点</div>
+                    </div>
+                </div>
+                <div class="banner-controls">
+                    <div class="banner-dot active"></div>
+                    <div class="banner-dot"></div>
+                    <div class="banner-dot"></div>
+                </div>
+            </div>
+            
+            <!-- 视频分区：国际焦点 -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-globe-asia"></i>
+                        国际焦点
+                    </div>
+                    <div class="section-more">
+                        查看更多 <i class="fas fa-angle-right"></i>
+                    </div>
+                </div>
+                <div class="video-grid">
+                    <!-- 视频卡片 1 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('neige1.jpg');">
+                            <div class="video-duration">12:34</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">日本新内阁亮相：全女性成员创历史，丰川祥子任首相</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>环球观察</span>
+                                </div>
+                                <span>45.6万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 视频卡片 2 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('zwd1.jpg');">
+                            <div class="video-duration">08:21</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">东京戒严结束！自卫队开始撤出首都圈</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>NHK速报</span>
+                                </div>
+                                <span>32.1万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 视频卡片 3 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('mg3.jpg');">
+                            <div class="video-duration">15:42</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">全美骚乱持续升级：国民警卫队进驻30个城市</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>国际新闻眼</span>
+                                </div>
+                                <span>78.3万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 视频卡片 4 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('mg1.jpg');">
+                            <div class="video-duration">10:05</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">沙特内战正式结束，国王宣布全国重建计划</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>中东观察</span>
+                                </div>
+                                <span>28.9万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 视频分区：科技前沿 -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-microchip"></i>
+                        科技前沿
+                    </div>
+                    <div class="section-more">
+                        查看更多 <i class="fas fa-angle-right"></i>
+                    </div>
+                </div>
+                <div class="video-grid">
+                    <!-- 视频卡片 1 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('https://images.unsplash.com/photo-1677442135722-5f1a2f5aaf4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                            <div class="video-duration">18:32</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">AI新突破：DeepMind推出蛋白质结构预测新模型</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>科技前沿站</span>
+                                </div>
+                                <span>62.4万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 视频卡片 2 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                            <div class="video-duration">14:15</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">国产芯片重大突破！14nm工艺实现量产</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>硬核科技</span>
+                                </div>
+                                <span>89.7万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 视频卡片 3 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                            <div class="video-duration">09:47</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">机器人手术新进展：远程手术精度达0.1毫米</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>未来医疗</span>
+                                </div>
+                                <span>37.2万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 视频卡片 4 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('https://images.unsplash.com/photo-1533750349088-cd871a92f312?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                            <div class="video-duration">16:22</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">量子计算机实用化取得突破，中国团队领跑全球</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>量子视界</span>
+                                </div>
+                                <span>51.9万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 视频分区：生活娱乐 -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i class="fas fa-smile"></i>
+                        生活娱乐
+                    </div>
+                    <div class="section-more">
+                        查看更多 <i class="fas fa-angle-right"></i>
+                    </div>
+                </div>
+                <div class="video-grid">
+                    <!-- 视频卡片 1 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('https://images.unsplash.com/photo-1541532713592-79a0317b6b77?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                            <div class="video-duration">11:08</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">2024年必去的10个国内小众旅行地，人少景美！</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>旅行日记</span>
+                                </div>
+                                <span>102.5万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 视频卡片 2 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                            <div class="video-duration">07:45</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">5种简单易学的家常菜，厨房小白也能轻松搞定</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>美食小当家</span>
+                                </div>
+                                <span>87.3万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 视频卡片 3 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                            <div class="video-duration">14:23</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">2024最值得期待电影TOP10，漫威DC神仙打架</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>电影风向标</span>
+                                </div>
+                                <span>68.9万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 视频卡片 4 -->
+                    <div class="video-card">
+                        <div class="video-cover" style="background-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+                            <div class="video-duration">09:12</div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">年度音乐盛典回顾：华语乐坛新势力崛起</div>
+                            <div class="video-meta">
+                                <div class="video-author">
+                                    <div class="author-avatar"></div>
+                                    <span>音乐现场</span>
+                                </div>
+                                <span>42.7万播放</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右侧边栏 -->
+        <div class="sidebar">
+            <!-- 排行榜 -->
+            <div class="sidebar-card">
+                <div class="sidebar-header">
+                    <i class="fas fa-chart-line"></i>
+                    热门排行榜
+                </div>
+                <div class="rank-list">
+                    <div class="rank-item">
+                        <div class="rank-num">1</div>
+                        <div class="rank-title">日本新内阁全女性阵容引全球关注</div>
+                    </div>
+                    <div class="rank-item">
+                        <div class="rank-num">2</div>
+                        <div class="rank-title">全美骚乱持续升级，国民警卫队全面出动</div>
+                    </div>
+                    <div class="rank-item">
+                        <div class="rank-num">3</div>
+                        <div class="rank-title">沙特内战正式结束，和平进程开启</div>
+                    </div>
+                    <div class="rank-item">
+                        <div class="rank-num">4</div>
+                        <div class="rank-title">国产芯片重大突破！14nm工艺实现量产</div>
+                    </div>
+                    <div class="rank-item">
+                        <div class="rank-num">5</div>
+                        <div class="rank-title">东京戒严结束！自卫队开始撤出首都圈</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 热门话题 -->
+            <div class="sidebar-card">
+                <div class="sidebar-header">
+                    <i class="fas fa-hashtag"></i>
+                    热门话题
+                </div>
+                <div class="hot-topics">
+                    <div class="topic-item">#日本全女性内阁</div>
+                    <div class="topic-item">#美国骚乱</div>
+                    <div class="topic-item">#沙特内战结束</div>
+                    <div class="topic-item">#国产芯片突破</div>
+                    <div class="topic-item">#AI新突破</div>
+                    <div class="topic-item">#油价上涨</div>
+                    <div class="topic-item">#东京戒严结束</div>
+                    <div class="topic-item">#国际局势</div>
+                </div>
+            </div>
+            
+            <!-- 推荐关注 -->
+            <div class="sidebar-card">
+                <div class="sidebar-header">
+                    <i class="fas fa-user-plus"></i>
+                    推荐关注
+                </div>
+                <div class="follow-card">
+                    <div class="follow-avatar"></div>
+                    <div class="follow-info">
+                        <div class="follow-name">国际新闻眼</div>
+                        <div class="follow-desc">深度解析全球热点事件</div>
+                    </div>
+                    <div class="follow-btn">关注</div>
+                </div>
+                <div class="follow-card">
+                    <div class="follow-avatar"></div>
+                    <div class="follow-info">
+                        <div class="follow-name">科技最前线</div>
+                        <div class="follow-desc">最新科技资讯与产品评测</div>
+                    </div>
+                    <div class="follow-btn">关注</div>
+                </div>
+                <div class="follow-card">
+                    <div class="follow-avatar"></div>
+                    <div class="follow-info">
+                        <div class="follow-name">环球旅行家</div>
+                        <div class="follow-desc">探索世界美景与旅行攻略</div>
+                    </div>
+                    <div class="follow-btn">关注</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部区域 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <div class="footer-title">关于我们</div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">企业介绍</a>
+                    <a href="#" class="footer-link">加入我们</a>
+                    <a href="#" class="footer-link">联系方式</a>
+                    <a href="#" class="footer-link">用户协议</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <div class="footer-title">帮助中心</div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">常见问题</a>
+                    <a href="#" class="footer-link">投稿指南</a>
+                    <a href="#" class="footer-link">版权声明</a>
+                    <a href="#" class="footer-link">反馈建议</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <div class="footer-title">合作伙伴</div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">内容合作</a>
+                    <a href="#" class="footer-link">广告合作</a>
+                    <a href="#" class="footer-link">媒体合作</a>
+                    <a href="#" class="footer-link">渠道合作</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>©2023 VidNews 视频资讯平台 版权所有 | 互联网新闻信息服务许可证：XXXXXX号 | 网络文化经营许可证：XXXXX号</p>
+            <p>违法和不良信息举报电话：123-4567-8910 | 举报邮箱：report@vidnews.com</p>
+        </div>
+    </footer>
+
+    <script>
+        // 轮播图功能
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.banner-slide');
+        const dots = document.querySelectorAll('.banner-dot');
+        
+        function showSlide(index) {
+            // 隐藏所有幻灯片
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            // 显示当前幻灯片
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
+        }
+        
+        // 为圆点添加点击事件
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showSlide(index);
+            });
+        });
+        
+        // 自动轮播
+        setInterval(() => {
+            let nextSlide = (currentSlide + 1) % slides.length;
+            showSlide(nextSlide);
+        }, 5000);
+        
+        // 视频卡片悬停效果增强
+        const videoCards = document.querySelectorAll('.video-card');
+        videoCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.1)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.05)';
+            });
+        });
+        
+        // 关注按钮交互
+        const followBtns = document.querySelectorAll('.follow-btn');
+        followBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (btn.textContent === '关注') {
+                    btn.textContent = '已关注';
+                    btn.style.background = '#e5f7ff';
+                    btn.style.color = '#00a1d6';
+                } else {
+                    btn.textContent = '关注';
+                    btn.style.background = '#f0f7ff';
+                }
+            });
+        });
+        
+        // 搜索功能
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                alert(`正在搜索: ${searchInput.value}`);
+            }
+        });
+    </script>
+</body>
+</html>

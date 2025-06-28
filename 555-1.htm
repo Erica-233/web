@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>農林水産省 - 若葉睦大臣</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: "Meiryo", "Hiragino Sans", sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        /* 顶部公告栏 */
+        .alert-bar {
+            background-color: #0068b7;
+            color: white;
+            padding: 5px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        /* 页眉 */
+        header {
+            background-color: white;
+            padding: 20px 0;
+            border-bottom: 2px solid #006400;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 60px;
+            margin-right: 15px;
+        }
+        
+        .logo-text h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #006400;
+        }
+        
+        .logo-text p {
+            font-size: 14px;
+            margin: 0;
+            color: #666;
+        }
+        
+        /* 导航菜单 */
+        nav {
+            background-color: #006400;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-menu li {
+            position: relative;
+        }
+        
+        .nav-menu li a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            font-size: 16px;
+        }
+        
+        .nav-menu li a:hover {
+            background-color: #004d00;
+        }
+        
+        /* 主要内容 */
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 70% 30%;
+            gap: 30px;
+        }
+        
+        /* 左侧内容 */
+        .main-content {
+            background-color: white;
+        }
+        
+        /* 右侧边栏 */
+        .sidebar {
+            background-color: white;
+        }
+        
+        /* 板块样式 */
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background-color: #f5f5f5;
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+            color: #006400;
+        }
+        
+        .section-body {
+            padding: 15px;
+        }
+        
+        /* 新闻列表 */
+        .news-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .news-item {
+            padding: 10px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        
+        .news-date {
+            color: #666;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        
+        .news-title {
+            font-weight: bold;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #006400;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #004d00;
+        }
+        
+        /* 页脚 */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .footer-links h3 {
+            color: #fff;
+            border-bottom: 1px solid #555;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+            margin-top: 20px;
+            grid-column: 1 / -1;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部公告栏 -->
+    <div class="alert-bar">
+        令和7年6月27日現在｜このサイトはInternet Explorerでの動作を保証しておりません
+    </div>
+    
+    <!-- 页眉 -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="https://www.maff.go.jp/j/tokei/kouhyou/kome/images/logo.gif" alt="農林水産省ロゴ">
+                <div class="logo-text">
+                    <h1>農林水産省</h1>
+                    <p>Minister of Agriculture, Forestry and Fisheries</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 导航菜单 -->
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li><a href="#">ホーム</a></li>
+                <li><a href="#">大臣プロフィール</a></li>
+                <li><a href="#">活動・スケジュール</a></li>
+                <li><a href="#">政策・取組</a></li>
+                <li><a href="#">記者会見</a></li>
+                <li><a href="#">お問い合わせ</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- 主要内容 -->
+    <main>
+        <div class="main-content">
+            <!-- 大臣致辞 -->
+            <div class="section">
+                <div class="section-header">大臣メッセージ</div>
+                <div class="section-body">
+                    <h2>「日本の農林水産業の未来を、持続可能な成長へと導く」</h2>
+                    <p>農林水産大臣 若葉 睦</p>
+                    <p>私たちは今、農林水産業の大きな転換期に立っています。気候変動や人口減少などの課題に対応しながら、持続可能な産業へと進化させていくことが求められています。</p>
+                    <p>スマート農業の推進、林業の成長産業化、水産資源の適切な管理など、様々な取り組みを進めてまいります。</p>
+                    <a href="#" class="btn">続きを読む</a>
+                    <a href="#" class="btn">動画メッセージを見る</a>
+                </div>
+            </div>
+            
+            <!-- 最新动态 -->
+            <div class="section">
+                <div class="section-header">新着情報</div>
+                <div class="section-body">
+                    <ul class="news-list">
+                        <li class="news-item">
+                            <span class="news-date">2025年6月25日</span>
+                            <span class="news-title">「スマート農業推進フォーラム」にて基調講演を実施</span>
+                            <a href="#">詳細</a>
+                        </li>
+                        <li class="news-item">
+                            <span class="news-date">2025年6月20日</span>
+                            <span class="news-title">豪州との水産物貿易協定調印式に出席</span>
+                            <a href="#">写真レポート</a>
+                        </li>
+                        <li class="news-item">
+                            <span class="news-date">2025年6月15日</span>
+                            <span class="news-title">令和7年度補正予算（農業災害復興支援）を閣議決定</span>
+                            <a href="#">詳細</a>
+                        </li>
+                        <li class="news-item">
+                            <span class="news-date">2025年6月10日</span>
+                            <span class="news-title">若葉大臣、福島県のスマート農業モデル地区を視察</span>
+                            <a href="#">レポート</a>
+                        </li>
+                    </ul>
+                    <a href="#" class="btn">過去の新着情報を見る</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右侧边栏 -->
+        <div class="sidebar">
+            <!-- 大臣行程 -->
+            <div class="section">
+                <div class="section-header">大臣の活動</div>
+                <div class="section-body">
+                    <h3>今週のスケジュール</h3>
+                    <ul>
+                        <li><strong>6月28日（土）</strong><br>
+                            北海道十勝地方の畜産農家視察<br>
+                            地域農業法人との意見交換会
+                        </li>
+                        <li><strong>6月27日（金）</strong><br>
+                            参議院農林水産委員会にて答弁
+                        </li>
+                    </ul>
+                    <a href="#" class="btn">過去の活動記録</a>
+                </div>
+            </div>
+            
+            <!-- 快速链接 -->
+            <div class="section">
+                <div class="section-header">関連リンク</div>
+                <div class="section-body">
+                    <ul>
+                        <li><a href="#">農林水産省公式サイト</a></li>
+                        <li><a href="#">大臣公式Twitter</a></li>
+                        <li><a href="#">政策白書</a></li>
+                        <li><a href="#">統計データ</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-links">
+                <h3>サイトポリシー</h3>
+                <ul>
+                    <li><a href="#">サイト利用条件</a></li>
+                    <li><a href="#">プライバシーポリシー</a></li>
+                    <li><a href="#">アクセシビリティ方針</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>お問い合わせ</h3>
+                <ul>
+                    <li>大臣官房秘書課</li>
+                    <li>Tel: 03-3502-8111（代表）</li>
+                    <li><a href="#">お問い合わせフォーム</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>関連機関</h3>
+                <ul>
+                    <li><a href="#">農林水産政策研究所</a></li>
+                    <li><a href="#">農林水産技術会議</a></li>
+                    <li><a href="#">食糧庁</a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                © 2025 農林水産省 All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

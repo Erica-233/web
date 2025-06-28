@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>財務省 内閣官房</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Meiryo", "Yu Gothic", "Hiragino Sans", sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.7;
+        }
+        
+        /* 顶部公告栏 */
+        .alert-bar {
+            background: linear-gradient(90deg, #002d62, #004098);
+            color: white;
+            padding: 8px 0;
+            text-align: center;
+            font-size: 14px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        /* 页眉 */
+        header {
+            background-color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #002d62, #004098);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .logo i {
+            font-size: 36px;
+            color: white;
+        }
+        
+        .logo-text h1 {
+            font-size: 24px;
+            color: #002d62;
+            font-weight: 700;
+        }
+        
+        .logo-text p {
+            font-size: 15px;
+            color: #666;
+            margin-top: 3px;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-box {
+            position: relative;
+            margin-right: 20px;
+        }
+        
+        .search-box input {
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            width: 250px;
+            font-size: 14px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        
+        /* 导航菜单 */
+        nav {
+            background: linear-gradient(90deg, #002d62, #004098);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-menu li {
+            position: relative;
+        }
+        
+        .nav-menu li a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-menu li a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .nav-menu li.active a {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 横幅区域 */
+        .banner {
+            background: linear-gradient(rgba(0, 45, 98, 0.9), rgba(0, 64, 152, 0.85)), url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .banner-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .banner h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .banner p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 35px;
+            background-color: white;
+            color: #002d62;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            background-color: #f8f9fa;
+        }
+        
+        /* 主要内容 */
+        .main-content {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            position: relative;
+            font-size: 28px;
+            color: #002d62;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(90deg, #002d62, #004098);
+            border-radius: 2px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            background: linear-gradient(90deg, #002d62, #004098);
+            color: white;
+            padding: 20px;
+        }
+        
+        .card-header h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .card-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .card-body ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .card-body li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+        }
+        
+        .card-body li:last-child {
+            border-bottom: none;
+        }
+        
+        .card-body li i {
+            color: #004098;
+            margin-right: 10px;
+            min-width: 20px;
+        }
+        
+        .news-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .news-section {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .section-header {
+            background: linear-gradient(90deg, #002d62, #004098);
+            color: white;
+            padding: 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .news-list {
+            padding: 20px;
+        }
+        
+        .news-item {
+            display: flex;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .news-date {
+            min-width: 100px;
+            font-weight: 600;
+            color: #004098;
+        }
+        
+        .news-content {
+            flex: 1;
+        }
+        
+        .news-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #002d62;
+        }
+        
+        .news-desc {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .minister-profile {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .profile-content {
+            padding: 25px;
+            display: flex;
+        }
+        
+        .minister-photo {
+            width: 200px;
+            height: 250px;
+            background: linear-gradient(135deg, #002d62, #004098);
+            border-radius: 10px;
+            margin-right: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .minister-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .minister-photo:hover .minister-image {
+            transform: scale(1.05);
+        }
+        
+        .minister-photo i {
+            font-size: 100px;
+            color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .minister-info {
+            flex: 1;
+        }
+        
+        .minister-name {
+            font-size: 28px;
+            color: #002d62;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .minister-title {
+            font-size: 18px;
+            color: #004098;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .minister-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .detail-item h4 {
+            color: #002d62;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        
+        .detail-item p {
+            font-size: 15px;
+            color: #555;
+        }
+        
+        /* 页脚 */
+        footer {
+            background: linear-gradient(90deg, #001a38, #002d62);
+            color: white;
+            padding: 60px 0 20px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        
+        .footer-logo {
+            margin-bottom: 20px;
+        }
+        
+        .footer-logo h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .footer-links h4 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-links h4::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 3px;
+            background: #4a8cff;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .contact-info p {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .contact-info i {
+            margin-right: 10px;
+            color: #4a8cff;
+            min-width: 20px;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            grid-column: 1 / -1;
+            font-size: 14px;
+            color: #aaa;
+        }
+        
+        .social-links {
+            display: flex;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: #4a8cff;
+            transform: translateY(-3px);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .news-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+            }
+            
+            .header-right {
+                margin-top: 20px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .nav-menu {
+                flex-wrap: wrap;
+            }
+            
+            .nav-menu li {
+                width: 50%;
+            }
+            
+            .nav-menu li a {
+                padding: 15px;
+                text-align: center;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .minister-profile .profile-content {
+                flex-direction: column;
+            }
+            
+            .minister-photo {
+                width: 100%;
+                height: 200px;
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+            
+            .minister-details {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .nav-menu li {
+                width: 100%;
+            }
+            
+            .search-box input {
+                width: 200px;
+            }
+            
+            .banner h2 {
+                font-size: 32px;
+            }
+            
+            .banner p {
+                font-size: 18px;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+   
+    
+    <!-- 页眉 -->
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-yen-sign"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>財務省</h1>
+                    <p>Ministry of Finance, Japan</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="サイト内検索...">
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 导航菜单 -->
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-menu">
+                <li class="active"><a href="#"><i class="fas fa-home"></i> ホーム</a></li>
+                <li><a href="#"><i class="fas fa-user"></i> 大臣プロフィール</a></li>
+                <li><a href="#"><i class="fas fa-calendar-alt"></i> 活動・スケジュール</a></li>
+                <li><a href="#"><i class="fas fa-file-alt"></i> 政策・取組</a></li>
+                <li><a href="#"><i class="fas fa-microphone"></i> 記者会見</a></li>
+                <li><a href="#"><i class="fas fa-envelope"></i> お問い合わせ</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- 横幅区域 -->
+    <section class="banner">
+        <div class="banner-content">
+            <h2>持続可能な財政と経済成長の実現へ</h2>
+            <p>長崎素世 財務大臣は、財政健全化と経済成長の両立を目指し、持続可能な社会の構築に取り組んでいます。</p>
+            <a href="#" class="btn">大臣のメッセージを読む</a>
+        </div>
+    </section>
+    
+    <!-- 主要内容 -->
+    <div class="main-content">
+        <h2 class="section-title">政策重点分野</h2>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="card-header" style="background-image: url('https://tse4-mm.cn.bing.net/th/id/OIP-C.v6oQ2JMIUFWBYTPWyyJ8FAHaHa?rs=1&pid=ImgDetMain'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 45, 98, 0.8);"></div>
+                    <h3 style="position: relative; z-index: 1;"><i class="fas fa-chart-line"></i> 財政健全化</h3>
+                    <p style="position: relative; z-index: 1;">持続可能な財政構造の構築</p>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> 中長期財政計画の推進</li>
+                        <li><i class="fas fa-check-circle"></i> 社会保障制度改革</li>
+                        <li><i class="fas fa-check-circle"></i> 国・地方の財政健全化</li>
+                        <li><i class="fas fa-check-circle"></i> 財政リスク管理の強化</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="card-header" style="background-image: url('https://tse4-mm.cn.bing.net/th/id/OIP-C.v6oQ2JMIUFWBYTPWyyJ8FAHaHa?rs=1&pid=ImgDetMain'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 45, 98, 0.8);"></div>
+                    <h3 style="position: relative; z-index: 1;"><i class="fas fa-globe-asia"></i> 国際金融</h3>
+                    <p style="position: relative; z-index: 1;">グローバル金融システムの安定</p>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> G20・IMF等国際会議への参画</li>
+                        <li><i class="fas fa-check-circle"></i> 為替市場の安定化対策</li>
+                        <li><i class="fas fa-check-circle"></i> 国際課税ルールの構築</li>
+                        <li><i class="fas fa-check-circle"></i> 途上国支援の強化</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="card-header" style="background-image: url('https://tse4-mm.cn.bing.net/th/id/OIP-C.v6oQ2JMIUFWBYTPWyyJ8FAHaHa?rs=1&pid=ImgDetMain'); background-size: cover; background-position: center; position: relative;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 45, 98, 0.8);"></div>
+                    <h3 style="position: relative; z-index: 1;"><i class="fas fa-lightbulb"></i> 経済成長戦略</h3>
+                    <p style="position: relative; z-index: 1;">新たな成長エンジンの創出</p>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> スタートアップ支援策の拡充</li>
+                        <li><i class="fas fa-check-circle"></i> グリーン成長投資の促進</li>
+                        <li><i class="fas fa-check-circle"></i> デジタル変革の推進</li>
+                        <li><i class="fas fa-check-circle"></i> 地方創生金融の強化</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="news-container">
+            <div class="news-section">
+                <div class="section-header">最新ニュース</div>
+                <div class="news-list">
+                    <div class="news-item">
+                        <div class="news-date">2024.01.25</div>
+                        <div class="news-content">
+                            <div class="news-title">G7財務大臣会合に出席</div>
+                            <div class="news-desc">イタリア・ミラノで開催されたG7財務大臣・中央銀行総裁会議に出席し、国際課税とグローバル経済について議論</div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-date">2024.01.20</div>
+                        <div class="news-content">
+                            <div class="news-title">令和6年度補正予算案を発表</div>
+                            <div class="news-desc">自然災害復興支援と経済対策を柱とする総額3.5兆円の補正予算案を閣議決定</div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-date">2024.01.15</div>
+                        <div class="news-content">
+                            <div class="news-title">金融庁と連携しFinTech推進会議を開催</div>
+                            <div class="news-desc">ブロックチェーン技術を活用した次世代金融システムの構築に向けた官民協議</div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-date">2024.01.10</div>
+                        <div class="news-content">
+                            <div class="news-title">地方創生ファンドの拡充を表明</div>
+                            <div class="news-desc">地域金融機関と連携した新たな地方企業支援スキームを発表</div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-date">2024.01.05</div>
+                        <div class="news-content">
+                            <div class="news-title">国際通貨基金（IMF）年次協議を終了</div>
+                            <div class="news-desc">IMF調査団との協議を終え、日本経済の現状と課題について共同声明を発表</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="minister-profile">
+                <div class="section-header">財務大臣プロフィール</div>
+                <div class="profile-content">
+                    <div class="minister-photo">
+                        <img src="soyo.jpg" alt="長崎素世財務大臣" class="minister-image">
+                    </div>
+                    <div class="minister-info">
+                        <div class="minister-name">長崎 素世</div>
+                        <div class="minister-title">財務大臣</div>
+                        <div class="minister-details">
+                            <div class="detail-item">
+                                <h4>生年月日</h4>
+                                <p>平成2年3月15日</p>
+                            </div>
+                            <div class="detail-item">
+                                <h4>出身地</h4>
+                                <p>長崎県長崎市</p>
+                            </div>
+                            <div class="detail-item">
+                                <h4>学歴</h4>
+                                <p>東京大学経済学部卒業<br>ハーバード大学ケネディスクール修了</p>
+                            </div>
+                            <div class="detail-item">
+                                <h4>経歴</h4>
+                                <p>財務官僚<br>国際通貨基金エコノミスト<br>参議院議員（3期）<br>財務副大臣</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-logo">
+                <h3>財務省</h3>
+                <p>Ministry of Finance, Japan</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h4>サイトメニュー</h4>
+                <ul>
+                    <li><a href="#">ホーム</a></li>
+                    <li><a href="#">大臣プロフィール</a></li>
+                    <li><a href="#">活動・スケジュール</a></li>
+                    <li><a href="#">政策・取組</a></li>
+                    <li><a href="#">記者会見</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4>政策情報</h4>
+                <ul>
+                    <li><a href="#">財政政策</a></li>
+                    <li><a href="#">税制改革</a></li>
+                    <li><a href="#">国際金融</a></li>
+                    <li><a href="#">国債管理</a></li>
+                    <li><a href="#">国有財産</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4>お問い合わせ</h4>
+                <div class="contact-info">
+                    <p><i class="fas fa-map-marker-alt"></i> 〒100-8940 東京都千代田区霞が関3-1-1</p>
+                    <p><i class="fas fa-phone"></i> 03-3581-4111（代表）</p>
+                    <p><i class="fas fa-envelope"></i> minister@mof.go.jp</p>
+                    <p><i class="fas fa-clock"></i> 月～金 9:00～17:15（祝日除く）</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                © 2025 Ministry of Finance, Japan. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
